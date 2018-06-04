@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -58,7 +59,7 @@ public class AppiumTests {
     }
 
     @Test
-    public void swipeToSurprisePLSection(){
+    public void swipeToSurprisePLSection() {
         new TouchAction(driver).longPress(point(109, 1370)).moveTo(point(882, 1370)).release().perform();
         MobileElement sectionName = driver.findElementById("sectionText");
         Assert.assertEquals(sectionName.getText(), "Surprise me");
@@ -69,14 +70,12 @@ public class AppiumTests {
         MobileElement filteredSection = driver.findElementByXPath("//android.widget.TextView[@text='Jaw-dropping']");
         filteredSection.click();
         MobileElement selectedTimeEl = driver.findElementById("timeTextView");
-        int selectedSeconds = Integer.parseInt(selectedTimeEl.getText())*60;
+        int selectedSeconds = Integer.parseInt(selectedTimeEl.getText()) * 60;
         MobileElement continueBtn = driver.findElementById("surpriseMeAction");
         continueBtn.click();
-        List<MobileElement> videos = driver.findElementsById("talkListItemRow");
-        for (MobileElement video : videos) {
-            List<MobileElement> textBoxes = video.findElementsByClassName("android.widget.TextView");
-            String videoDurationText = textBoxes.get(textBoxes.size() - 1).getText();
-            String[] splitTime = videoDurationText.split(":");
+        List<MobileElement> videoDurations = driver.findElementsById("talksListTimeTextView");
+        for (MobileElement videoTime : videoDurations) {
+            String[] splitTime = videoTime.getText().split(":");
             int videoDurationSeconds = Integer.parseInt(splitTime[0]) * 60 + Integer.parseInt(splitTime[1]);
             Assert.assertTrue(videoDurationSeconds <= selectedSeconds);
         }
