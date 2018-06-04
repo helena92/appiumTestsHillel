@@ -4,16 +4,16 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static io.appium.java_client.touch.offset.PointOption.point;
 
 public class Tools {
-    private static AndroidDriver driver;
 
-    public static void setDriver(AndroidDriver driver) {
+    private static AndroidDriver <MobileElement> driver;
+
+    public static void setDriver(AndroidDriver <MobileElement> driver) {
         Tools.driver = driver;
     }
 

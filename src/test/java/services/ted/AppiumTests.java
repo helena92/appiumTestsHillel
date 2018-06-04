@@ -15,11 +15,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AppiumTestBase {
+public class AppiumTests {
 
     protected static AndroidDriver<MobileElement> driver;
 
-    @BeforeTest(alwaysRun = true)
+    @BeforeTest
     public void setUp() throws MalformedURLException {
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
@@ -28,7 +28,7 @@ public class AppiumTestBase {
         caps.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
         caps.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, "com.ted.android");
         caps.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, "com.ted.android.view.home.HomeActivity");
-        driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
+        driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         Tools.setDriver(driver);
     }
@@ -52,10 +52,14 @@ public class AppiumTestBase {
     }
 
     @Test
-    public void timeFilterTest() {
-        //MobileElement surpriseSection = driver.findElementByAccessibilityId("Surprise me");
-        //surpriseSection.click();
+    public void swipeToSurprisePLSection(){
         Tools.swipeByCoords(109, 1370, 882, 1370);
+        MobileElement sectionName = driver.findElementById("sectionText");
+        Assert.assertEquals(sectionName.getText(), "Surprise me");
+    }
+
+    @Test
+    public void videoTimeFilterTest() {
         MobileElement filteredSection = driver.findElementByXPath("//android.widget.TextView[@text='Jaw-dropping']");
         filteredSection.click();
         MobileElement selectedTimeEl = driver.findElementById("timeTextView");
@@ -63,16 +67,16 @@ public class AppiumTestBase {
         MobileElement continueBtn = driver.findElementById("surpriseMeAction");
         continueBtn.click();
         List<MobileElement> videos = driver.findElementsById("talkListItemRow");
-        for (int i = 0; i < videos.size(); ++i) {
-            List <MobileElement> textBoxes = videos.get(i).findElementsByClassName("android.widget.TextView");
+        for (MobileElement video : videos) {
+            List<MobileElement> textBoxes = video.findElementsByClassName("android.widget.TextView");
             String videoDurationText = textBoxes.get(textBoxes.size() - 1).getText();
             String[] splitTime = videoDurationText.split(":");
-            int videoDurationSeconds = Integer.parseInt(splitTime[0])*60 + Integer.parseInt(splitTime[1]);
+            int videoDurationSeconds = Integer.parseInt(splitTime[0]) * 60 + Integer.parseInt(splitTime[1]);
             Assert.assertTrue(videoDurationSeconds <= selectedSeconds);
         }
     }
 
-    @AfterTest(alwaysRun = true)
+    @AfterTest
     public void tearDown() {
         driver.quit();
 
