@@ -19,6 +19,10 @@ public class AppiumTests {
 
     protected static AndroidDriver<MobileElement> driver;
 
+    public static final String EMAIL = "echornobai@intersog.com";
+    public static final String CORRECT_PWD = "testpass";
+
+
     @BeforeTest
     public void setUp() throws MalformedURLException {
         DesiredCapabilities caps = new DesiredCapabilities();
@@ -34,15 +38,15 @@ public class AppiumTests {
     }
 
     @Test
-    public void loginTest() {
+    public void successLoginTest() {
         MobileElement profile = driver.findElementByAccessibilityId("My talks");
         profile.click();
         MobileElement loginSection = driver.findElementById("myTalksLoggedOutActionLogin");
         loginSection.click();
         MobileElement emailInput = driver.findElementById("user_email");
-        emailInput.sendKeys("echornobai@intersog.com");
+        emailInput.sendKeys(EMAIL);
         MobileElement pwdInput = driver.findElementById("user_password");
-        pwdInput.sendKeys("testpass");
+        pwdInput.sendKeys(CORRECT_PWD);
         MobileElement logInBtn = driver.findElementByAccessibilityId("Log in");
         logInBtn.click();
         MobileElement OKButton = driver.findElementById("button2");
