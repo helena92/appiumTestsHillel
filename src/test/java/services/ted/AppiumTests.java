@@ -1,6 +1,7 @@
 package services.ted;
 
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -14,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static io.appium.java_client.touch.offset.PointOption.point;
 
 public class AppiumTests {
 
@@ -34,7 +37,6 @@ public class AppiumTests {
         caps.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, "com.ted.android.view.home.HomeActivity");
         driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        Tools.setDriver(driver);
     }
 
     @Test
@@ -57,7 +59,7 @@ public class AppiumTests {
 
     @Test
     public void swipeToSurprisePLSection(){
-        Tools.swipeByCoords(109, 1370, 882, 1370);
+        new TouchAction(driver).longPress(point(109, 1370)).moveTo(point(882, 1370)).release().perform();
         MobileElement sectionName = driver.findElementById("sectionText");
         Assert.assertEquals(sectionName.getText(), "Surprise me");
     }
